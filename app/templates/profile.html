@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+     <!-- Title -->
+     <title>SafarDarshan | Home</title>
+     <!-- google font -->
+         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+     
+     
+         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
+         <link rel="stylesheet" href="{{ url_for('static', filename='css/others/animate.css') }}">
+         <link rel="stylesheet" href="{{ url_for('static', filename='css/others/magnific-popup.css') }}">
+         <link rel="stylesheet" href="{{ url_for('static', filename='css/others/owl.carousel.min.css') }}">
+         <link rel="stylesheet" href="{{ url_for('static', filename='css/others/font-awesome.min.css') }}">
+         <link rel="stylesheet" href="{{ url_for('static', filename='css/others/pe-icon-7-stroke.css') }}">
+         
+     
+         <!-- Core Stylesheet -->
+         <link href="{{ url_for('static', filename='css/responsive/style.css') }}" rel="stylesheet">
+     
+         <!-- Responsive CSS -->
+         <link href="{{ url_for('static', filename='css/responsive/responsive.css') }}" rel="stylesheet">
+         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+     
+     
+     </head>
+     
+     <body>
+     
+      <!-- Flash Message -->
+      {% for message in get_flashed_messages() %}
+      <div class="alert alert-success alert-dismissible fade show flash-message" role="alert">
+          <strong>{{ message }}</strong>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+      {% endfor %} 
+     
+       <!-- Preloader -->
+       <div id="preloader">
+         <div class="dorne-load"></div>
+     </div>
+       
+     
+         <!-- ***** Search Form Area ***** -->
+     <div class="dorne-search-form d-flex align-items-center">
+         <div class="container">
+             <div class="row">
+                 <div class="col-12">
+                     <div class="search-close-btn" id="closeBtn">
+                         <i class="pe-7s-close-circle" aria-hidden="true"></i>
+                     </div>
+                     <form action="{{ url_for('views.search') }}" method="get"> 
+                         <input type="search" name="query" id="search" placeholder="Search Your Desired Destinations or Events" required> <!-- Updated name -->
+                         <input type="submit" class="d-none" value="submit">
+                     </form>
+                 </div>
+             </div>
+         </div>
+     </div>
+     
+     
+       
+     <!-- ***** Header Area Start ***** -->
+     <header class="header_area" id="header">
+         <div class="container-fluid h-100">
+             <div class="row h-100">
+                 <div class="col-12 h-100">
+                     <nav class="h-100 navbar navbar-expand-lg">
+                         <a class="navbar-brand" href="{{ url_for('views.home') }}">
+                             <img src="{{ url_for('static', filename='img/core-img/logo1.png') }}" alt="Website Logo">
+                         </a>
+                         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#dorneNav" aria-controls="dorneNav" aria-expanded="false" aria-label="Toggle navigation">
+                             <span class="fa fa-bars"></span>
+                         </button>
+                         <!-- Nav -->
+                         <div class="collapse navbar-collapse" id="dorneNav">
+                             <ul class="navbar-nav mr-auto" id="dorneMenu">
+                                 <li class="nav-item active">
+                                     <a class="nav-link" href="{{ url_for('views.home') }}">Home <span class="sr-only">(current)</span></a>
+                                 </li>
+                                 <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Explore <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="/explore/destinations">Destinations</a>
+                                        <a class="dropdown-item" href="/explore/hotels">Hotels</a>
+                                        <a class="dropdown-item" href="/explore/restaurants">Restaurants</a>
+                                    </div>
+                                </li>
+                                 <li class="nav-item">
+                                     <a class="nav-link" href="{{ url_for('views.contact') }}">Contact</a>
+                                 </li>
+                                 <li class="nav-item">
+                                     <a class="nav-link" href="{{ url_for('views.about') }}">About Us</a>
+                                 </li>
+                             </ul>
+     
+                             <!-- Search button (Visible to everyone) -->
+                             <div class="dorne-search-btn">
+                                 <a id="search-btn" href="#" aria-label="Search">
+                                     <i class="fa fa-search" aria-hidden="true"></i> Search
+                                 </a>
+                             </div>
+     
+                             <!-- If the user is not logged in -->
+                             {% if not current_user.is_authenticated %}
+                             <div class="dorne-signin-btn">
+                                 <a href="/signin">Sign in or Sign up</a>
+                             </div>
+                             <!-- If the user is logged in -->
+                             {% else %}
+                             <!-- Profile Button (Visible only after login) -->
+                             <div class="dorne-profile-btn">
+                                 <a href="/profile" class="btn dorne-btn">Profile</a>
+                             </div>
+     
+                             <!-- Add Listings Button (Visible if user ID is 1, 2, 3, or 4) -->
+                             {% if current_user.id in [1, 2, 3, 4] %}
+                             <div class="dorne-add-listings-btn">
+                                 <a href="/add_place" class="btn dorne-btn">+ Add</a>
+                             </div>
+                             <!-- Favorites Button (Visible for other users) -->
+                             {% else %}
+                             <div class="dorne-favorites-btn">
+                                 <a href="#" class="btn dorne-btn">
+                                     <i class="fa fa-heart"></i> Favorites
+                                 </a>
+                             </div>
+                             {% endif %}
+                             {% endif %}
+                         </div>
+                     </nav>
+                 </div>
+             </div>
+         </div>
+     </header>
+      <!-- ***** Breadcumb Area Start ***** -->
+      <div class="breadcumb-area bg-img bg-overlay" style="background-image: url(static/img/bg-img/hero-1.jpg)">
+    </div>
+    <!-- ***** Breadcumb Area End ***** -->
+
+<br>
+<br><br><br><br><br><br>
+
+
+
+<div class="container profile-container">
+    <div class="profile-header">
+        <h2>Profile</h2>
+    </div>
+
+    <div class="profile-details">
+        <p>Username:<strong>{{ current_user.name }}</strong></p>
+        <p>Email: <strong>{{ current_user.email }}</strong></p>
+    </div>
+
+    <!-- Change Password Button -->
+    <button class="btn btn-primary" id="change-password-btn">Change Password</button>
+
+    <!-- Change Password Form -->
+    <form id="change-password-form" action="{{ url_for('auth.change_password') }}" method="POST">
+        <div class="form-group">
+            <label for="current-password">Current Password:</label>
+            <input type="password" class="form-control" id="current-password" name="current_password" required>
+        </div>
+        <div class="form-group">
+            <label for="new-password">New Password:</label>
+            <input type="password" class="form-control" id="new-password" name="new_password" required>
+        </div>
+        <div class="form-group">
+            <label for="confirm-password">Confirm New Password:</label>
+            <input type="password" class="form-control" id="confirm-password" name="confirm_password" required>
+        </div>
+        <button type="submit" class="btn btn-success">Update Password</button>
+    </form>
+    
+
+    <form action="{{ url_for('auth.log_out') }}" method="POST" class="d-inline">
+        <button type="submit" class="btn btn-danger">Logout</button>
+    </form>
+    
+    
+
+<br><br>
+
+
+ <!-- ****** Footer Area Start ****** -->
+ <footer class="dorne-footer-area">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 d-md-flex align-items-center justify-content-between">
+                <div class="footer-text">
+                    <p>
+                        &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | SafarDarshan <i class="fa fa-heart-o" aria-hidden="true"></i><a href="https://colorlib.com" target="_blank" rel="noopener noreferrer"></a>  <a href="https://themewagon.com" target="_blank" rel="noopener noreferrer"></a>
+                    </p>
+                </div>
+                <div class="footer-social-btns">
+                    <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin"></i></a>
+                    <a href="#" aria-label="Behance"><i class="fa fa-behance"></i></a>
+                    <a href="#" aria-label="Dribbble"><i class="fa fa-dribbble"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- ****** Footer Area End ****** -->
+
+ <!-- jQuery-2.2.4 js -->
+ <script src="{{ url_for('static', filename='js/jquery/jquery-2.2.4.min.js') }}"></script>
+ <!-- Popper js -->
+ <script src="{{ url_for('static', filename='js/bootstrap/popper.min.js') }}"></script>
+ <!-- Bootstrap-4 js -->
+ <script src="{{ url_for('static', filename='js/bootstrap/bootstrap.min.js') }}"></script>
+ <!-- All Plugins js -->
+ <script src="{{ url_for('static', filename='js/others/plugins.js') }}"></script>
+ <!-- Active JS -->
+ <script src="{{ url_for('static',filename='js/active.js') }}"></script>
+
+ <script src="{{ url_for('static', filename='js/others/index.js') }}"></script>
+
+ <script>
+    // Toggle Change Password Form
+    document.getElementById('change-password-btn').addEventListener('click', function() {
+        var changePasswordForm = document.getElementById('change-password-form');
+        if (changePasswordForm.style.display === 'none' || changePasswordForm.style.display === '') {
+            changePasswordForm.style.display = 'block';
+        } else {
+            changePasswordForm.style.display = 'none';
+        }
+    });
+</script>
+ 
+
+    
+</body>
+</html>

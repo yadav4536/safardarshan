@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Expense</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Add your existing CSS styles here */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Edit Expense</h1>
+        <form method="POST">
+            <div class="form-group">
+                <label for="expense_name">Expense Name:</label>
+                <input type="text" id="expense_name" name="expense_name" value="{{ expense.name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="expense_amount">Expense Amount:</label>
+                <input type="number" id="expense_amount" name="expense_amount" value="{{ expense.amount }}" required>
+            </div>
+            <button type="submit">Update Expense</button>
+        </form>
+        <a href="{{ url_for('auth.view_budget', budget_id=expense.budget.id) }}">Back to Budget</a>
+    </div>
+</body>
+</html>

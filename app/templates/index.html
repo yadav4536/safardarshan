@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title -->
+    <title>SafarDarshan | Home</title>
+<!-- google font -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/others/animate.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/others/magnific-popup.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/others/owl.carousel.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/others/font-awesome.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/others/pe-icon-7-stroke.css') }}">
+    
+
+    <!-- Core Stylesheet -->
+    <link href="{{ url_for('static', filename='css/responsive/style.css') }}" rel="stylesheet">
+
+    <!-- Responsive CSS -->
+    <link href="{{ url_for('static', filename='css/responsive/responsive.css') }}" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+
+</head>
+
+<body>
+
+ <!-- Flash Message -->
+ {% for message in get_flashed_messages() %}
+ <div class="alert alert-success alert-dismissible fade show flash-message" role="alert">
+     <strong>{{ message }}</strong>
+     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+ </div>
+ {% endfor %} 
+
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="dorne-load"></div>
+</div>
+  
+
+    <!-- ***** Search Form Area ***** -->
+    <div class="dorne-search-form d-flex align-items-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="search-close-btn" id="closeBtn">
+                        <i class="pe-7s-close-circle" aria-hidden="true"></i>
+                    </div>
+                    <form action="{{ url_for('views.search') }}" method="get"> 
+                        <input type="search" name="query" id="search" placeholder="Search Your Desired City or Destinations " required>
+                        <input type="submit" class="d-none" value="submit">
+                    </form>                
+                    <div id="suggestions" class="suggestions-box"></div> <!-- Suggestions container -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+<!-- ***** Header Area Start ***** -->
+<header class="header_area" id="header">
+    <div class="container-fluid h-100">
+        <div class="row h-100">
+            <div class="col-12 h-100">
+                <nav class="h-100 navbar navbar-expand-lg">
+                    <a class="navbar-brand" href="{{ url_for('views.home') }}">
+                        <img src="{{ url_for('static', filename='img/core-img/logo1.png') }}" alt="Website Logo">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#dorneNav" aria-controls="dorneNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="fa fa-bars"></span>
+                    </button>
+                    <!-- Nav -->
+                    <div class="collapse navbar-collapse" id="dorneNav">
+                        <ul class="navbar-nav mr-auto" id="dorneMenu">
+                            <li class="nav-item active">
+                                <a class="nav-link" href="{{ url_for('views.home') }}">Home <span class="sr-only">(current)</span></a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Explore <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href="/explore/destinations">Destinations</a>
+                                    <a class="dropdown-item" href="/explore/hotels">Hotels</a>
+                                    <a class="dropdown-item" href="/explore/restaurants">Restaurants</a>
+                                </div>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url_for('views.contact') }}">Contact</a>
+                            </li>
+                            
+
+                            <!-- Budget feature visible to regular users only -->
+                            {% if current_user.id != 1 %}
+                            {% if current_user.is_authenticated %}
+                                
+                                <li class="nav-item">
+                                    {% if user_budget %}
+                                        <a class="nav-link" href="{{ url_for('auth.view_budget', budget_id=user_budget.id) }}">Budget Monitor</a>
+                                    {% else %}
+                                        <a class="nav-link" href="{{ url_for('auth.create_budget') }}">Create Budget</a>
+                                    {% endif %}
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                        
+
+                        </ul>
+
+                        <!-- Search button (Visible to everyone) -->
+                        <div class="dorne-search-btn">
+                            <a id="search-btn" href="#" aria-label="Search">
+                                <i class="fa fa-search" aria-hidden="true"></i> Search
+                            </a>
+                        </div>
+
+                        <!-- If the user is not logged in -->
+                        {% if not current_user.is_authenticated %}
+                        <div class="dorne-signin-btn">
+                            <a href="/signin">Sign in or Sign up</a>
+                        </div>
+                        <!-- If the user is logged in -->
+                        {% else %}
+                        <!-- Profile Button (Visible only after login) -->
+                        <div class="dorne-profile-btn">
+                            <a href="/profile" class="btn dorne-btn">Profile</a>
+                        </div>
+
+                        <!-- Add Listings Button (Visible if user ID is 1, 2, 3, or 4) -->
+                        {% if current_user.id in [1] %}
+                        <div class="dorne-add-listings-btn">
+                            <a href="/add_place" class="btn dorne-btn">+ Add</a>
+                        </div>
+                        <!-- Favorites Button (Visible for other users) -->
+                        {% else %}
+                        <div class="dorne-favorites-btn">
+                            <a href="#" class="btn dorne-btn">
+                                <i class="fa fa-heart"></i> Favorites
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% endif %}
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- ***** Header Area End ***** -->
+
+
+
+
+   <!-- ***** Welcome Area Start ***** -->
+   <section class="dorne-welcome-area bg-img bg-overlay" >
+    <div class="container h-100">
+        <div class="row h-100 align-items-center justify-content-center">
+            <div class="col-12 col-md-10">
+                <div class="hero-content">
+                    <h2>Discover Places Near You</h2>
+                    <h4>We Are Here to Guide You</h4>
+                </div>
+                <!-- Hero Search Form -->
+                
+                <div class="hero-search-form">
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-places" role="tabpanel" aria-labelledby="nav-places-tab">
+                            <h6>What Are You Looking For?</h6>
+                            <form action="{{ url_for('views.search_advanced') }}" method="get">
+                                <!-- Dynamic City Dropdown -->
+                                <select class="custom-select" name="city">
+                                    <option value="" selected>Select Your City</option>
+                                    {% for city in cities %}
+                                        <option value="{{ city['destination'] }}" {% if city['destination'] == selected_city %}selected{% endif %}>{{ city['destination'] }}</option>
+                                    {% endfor %}
+                                </select>
+                
+                                <!-- Dynamic Category Dropdown -->
+                                <select class="custom-select" name="category">
+                                    <option value="" selected>Select Category</option>
+                                    {% for category in categories %}
+                                        <option value="{{ category['id'] }}" {% if category['id'] == category %}selected{% endif %}>
+                                            {{ category['name'] }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                
+                                <button type="submit" class="btn dorne-btn">
+                                    <i class="fa fa-search pr-2" aria-hidden="true"></i> Search
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                
+
+            </div>
+        </div>
+    </div>
+      
+                
+
+    <!-- ***** Catagory Area Start ***** -->
+    <section class="dorne-catagory-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="all-catagories">
+                        <div class="row">
+                            <!-- Single Catagory Area -->
+                            <div class="col-12 col-sm-6 col-md">
+                                <div class="single-catagory-area wow fadeInUpBig" data-wow-delay="0.2s">
+                                    <div class="catagory-content">
+                                        <img src="{{ url_for('static', filename='img/core-img/icon-1.png') }}" alt="">
+                                        <a href="/explore/hotels">
+                                            <h6>Hotels</h6>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Single Catagory Area -->
+                            <div class="col-12 col-sm-6 col-md">
+                                <div class="single-catagory-area wow fadeInUpBig" data-wow-delay="0.4s">
+                                    <div class="catagory-content">
+                                        <img src="{{ url_for('static', filename='img/core-img/icon-2.png') }}" alt="">
+                                        <a href="/explore/restaurants">
+                                            <h6>Restaurants</h6>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Single Catagory Area -->
+                            <div class="col-12 col-sm-6 col-md">
+                                <div class="single-catagory-area wow fadeInUpBig" data-wow-delay="0.8s">
+                                    <div class="catagory-content">
+                                        <img src="{{ url_for('static', filename='img/core-img/icon-3.png') }}" alt="">
+                                        <a href="/explore/destinations">
+                                            <h6>Destinations</h6>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- ***** Catagory Area End ***** -->
+
+<!-- ***** About Area Start ***** -->
+<section class="dorne-about-area section-padding-0-100" id="aboutUs">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="about-content text-center">
+                    <h2>Discover Your City with <br><span style="font-weight: bold;">SafarDarshan</span></h2>
+                    <p>SafarDarshan is a comprehensive travel platform designed to help you explore and discover the hidden gems in your city and beyond. Whether you’re a local seeking new experiences or a traveler visiting for the first time, SafarDarshan offers tailored recommendations and insights to enhance your journey.</p>
+                    <a href="{{ url_for('views.about') }}" class="btn dorne-btn" role="button">Learn More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ***** About Area End ***** -->
+
+
+<!-- Features city -->
+<section class="dorne-editors-pick-area bg-img bg-overlay-9 section-padding-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading text-center">
+                    <h4>Cities You Must See</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="scroll-container">
+                    <div class="scroll-content">
+                        {% if cities %}
+                            {% for city in cities %}
+                                <div class="single-editors-pick-area wow fadeInUp" data-wow-delay="0.2s">
+                                    <img src="{{ url_for('static', filename='uploads/' + city.pictures[0]) }}" alt="{{ city.destination }}" title="Explore {{ city.destination }}">
+
+                                    <div class="editors-pick-info">
+                                        <div class="places-total-destinations d-flex">
+                                            <a href="{{ city.location }}" title="View {{ city.destination }}">{{ city.destination }}</a>
+                                            <a href="{{ city.location }}" title="View Destinations in {{ city.destination }}">{{ city.total_destinations }} Destinations</a>
+                                        </div>
+                                        
+                                        
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p>No cities found.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features city end  -->
+
+<!-- ***** Features Destination  Area Start ***** -->
+<section class="dorne-features-destinations-area">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading dark text-center">
+                    <span></span>
+                    <h4>Featured Destinations</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                        <div class="features-slides owl-carousel">
+                            <!-- Loop through places from Flask context -->
+                            {% for place in places %}
+                            <div class="single-features-area">
+                                <!-- Display the first image from the pictures list -->
+                                <img class="feature-image" src="{{ url_for('static', filename='uploads/' + place.pictures[0]) }}" alt="{{ place.destination }}" title="Explore {{ place.destination }}">
+                                <!-- Dynamic ratings and map link -->
+                                <div class="ratings-map-area d-flex">
+                                    <a href="{{ place.location }}" title="View on Map" target="_blank">
+                                        <img src="{{ url_for('static', filename='img/core-img/map.png') }}" alt="Map Icon">
+                                    </a>
+                                </div>
+                                <div class="feature-content d-flex align-items-center justify-content-between">
+                                    <div class="feature-title">
+                                        <h5>{{ place.destination }}</h5>
+                                        <p>{{ place.city }}</p>
+                                    </div>
+                                    <!-- favorite section -->
+                                    <div class="feature-favourite">
+                                        <a href="#" title="Add to Favorites"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                                    </div>
+                                    
+                                    
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                </div>
+                   
+            </div>
+        </div>
+        
+    </div>
+</section>
+
+
+
+<!-- ***** Features Restaurant Area Start ***** -->
+<section class="dorne-features-restaurant-area bg-default">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading text-center">
+                    <span></span>
+                    <h4>Featured Restaurants</h4>
+                    <!-- <p>Editor’s pick</p> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="features-slides owl-carousel">
+                    <!-- Loop through the restaurants data -->
+                    {% for restaurant in restaurants %}
+                    <div class="single-features-area">
+                        <!-- Dynamic image from restaurant data -->
+                        <img class="feature-image" src="{{ url_for('static', filename='uploads/' + restaurant.pictures[0]) }}" alt="{{ restaurant.name }} in {{ restaurant.city }}" title="{{ restaurant.name }}">
+                        
+                        <!-- Dynamic ratings and map link -->
+                        <div class="ratings-map-area d-flex">
+                            <a href="{{ restaurant.location }}" title="View on Map" target="_blank"><img src="{{ url_for('static', filename='img/core-img/map.png') }}" alt="Map Icon"></a>
+                        </div>
+                        
+                        <!-- Dynamic restaurant details -->
+                        <div class="feature-content d-flex align-items-center justify-content-between">
+                            <div class="feature-title">
+                                <h5>{{ restaurant.destination }}</h5>
+                                <p>{{ restaurant.city }}</p>
+                            </div>
+                            <div class="feature-favourite">
+                                <a href="#" title="Add to Favorites"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- ***** Features Restaurant Area End ***** -->
+
+
+<!-- ***** Features Hotels Area Start ***** -->
+<section class="dorne-features-destinations-area">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="section-heading dark text-center">
+                    <span></span>
+                    <h4>Featured Hotels</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="features-slides owl-carousel">
+                    <!-- Loop through the hotels data -->
+                    {% for hotel in hotels %}
+                    <!-- Single Features Area -->
+                    <div class="single-features-area">
+                        <!-- Dynamic image from hotel data -->
+                        <img class="feature-image" src="{{ url_for('static', filename='uploads/' + hotel.pictures[0]) }}" alt="{{ hotel.name }}" title="Visit {{ hotel.name }}">
+                        
+                       <!-- Dynamic ratings and map link -->
+                       <div class="ratings-map-area d-flex">
+                        <a href="{{ hotel.location }}" title="View on Map" target="_blank"><img src="{{ url_for('static', filename='img/core-img/map.png') }}" alt="Map Icon"></a>
+                    </div>
+                        
+                        <div class="feature-content d-flex align-items-center justify-content-between">
+                            <div class="feature-title">
+                                <h5>{{ hotel.destination }}</h5>
+                                <p>{{ hotel.city }}</p>
+                            </div>
+                            <div class="feature-favourite">
+                                <a href="#" title="Add to Favorites"><i class="fa fa-heart-o" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ***** Features Hotel Area End ***** -->
+
+
+
+    <div>
+        <section>
+         <!-- Counts Section -->
+         <div class="container mt-5">
+            <div class="row text-center">
+                <!-- Cities Count -->
+                <div class="col-md-3">
+                    <div class="card shadow-sm border-primary count-card">
+                        <div class="card-body">
+                            <h4 class="card-title count-title">Cities</h4>
+                            <p class="card-text display-4 count-number">{{ city_count }}+</p>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Destinations Count -->
+                <div class="col-md-3">
+                    <div class="card shadow-sm border-primary count-card">
+                        <div class="card-body">
+                            <h4 class="card-title count-title">Destinations</h4>
+                            <p class="card-text display-4 count-number">{{ destination_count }}+</p>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Hotels Count -->
+                <div class="col-md-3">
+                    <div class="card shadow-sm border-primary count-card">
+                        <div class="card-body">
+                            <h4 class="card-title count-title">Hotels</h4>
+                            <p class="card-text display-4 count-number">{{ hotel_count }}+</p>
+                        </div>
+                    </div>
+                </div>
+    
+                <!-- Restaurants Count -->
+                <div class="col-md-3">
+                    <div class="card shadow-sm border-primary count-card">
+                        <div class="card-body">
+                            <h4 class="card-title count-title">Restaurants</h4>
+                            <p class="card-text display-4 count-number">{{ restaurant_count }}+</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+<!-- ****** Footer Area Start ****** -->
+<footer class="dorne-footer-area">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 d-md-flex align-items-center justify-content-between">
+                <div class="footer-text">
+                    <p>
+                        &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | SafarDarshan <i class="fa fa-heart-o" aria-hidden="true"></i><a href="https://colorlib.com" target="_blank" rel="noopener noreferrer"></a>  <a href="https://themewagon.com" target="_blank" rel="noopener noreferrer"></a>
+                    </p>
+                </div>
+                <div class="footer-social-btns">
+                    <a href="#" aria-label="LinkedIn"><i class="fa fa-linkedin"></i></a>
+                    <a href="#" aria-label="Behance"><i class="fa fa-behance"></i></a>
+                    <a href="#" aria-label="Dribbble"><i class="fa fa-dribbble"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+                    <a href="#" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- ****** Footer Area End ****** -->
+
+
+
+
+    <!-- jQuery-2.2.4 js -->
+    <script src="{{ url_for('static', filename='js/jquery/jquery-2.2.4.min.js') }}"></script>
+    <!-- Popper js -->
+    <script src="{{ url_for('static', filename='js/bootstrap/popper.min.js') }}"></script>
+    <!-- Bootstrap-4 js -->
+    <script src="{{ url_for('static', filename='js/bootstrap/bootstrap.min.js') }}"></script>
+    <!-- All Plugins js -->
+    <script src="{{ url_for('static', filename='js/others/plugins.js') }}"></script>
+    <!-- Active JS -->
+    <script src="{{ url_for('static',filename='js/active.js') }}"></script>
+
+
+    <script src="{{ url_for('static', filename='js/others/index.js') }}"></script>
+
+    
+</body>
+
+</html>

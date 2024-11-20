@@ -1,0 +1,71 @@
+.count-card {
+    
+    border: 2px solid #0d6efd; /* Primary color border */
+    transition: transform 0.3s ease-in-out; /* Smooth hover effect */
+}
+
+.count-card:hover {
+    transform: translateY(-10px); /* Lift card on hover */
+}
+
+.count-title {
+    
+    font-weight: 600;
+    color: #0d6efd; /* Primary color text */
+    margin-bottom: 15px;
+}
+
+.count-number {
+    color: #343a40; /* Dark gray for the number */
+    font-weight: 500;
+}
+
+.card-body {
+    padding: 30px; /* Add more space inside the card */
+}
+
+.count-card .card-title, .count-card .card-text {
+    margin: 0;
+}
+
+.row.text-center .col-md-3 {
+    margin-bottom: 30px;
+}
+
+/* Background color for the count section */
+.container.mt-5 {
+   
+    padding: 50px 20px;
+    border-radius: 10px;
+}
+
+/* Team Member Styling */
+.team-member {
+    background-color: #f8f9fa;  /* Light gray background */
+    border: 2px solid #0d6efd;  /* Primary color border */
+    border-radius: 10px;  /* Rounded corners */
+    transition: transform 0.3s ease;  /* Smooth hover effect */
+}
+
+.team-member:hover {
+    transform: translateY(-5px);  /* Hover lift */
+}
+
+.team-member p {
+    color: #0d6efd;  /* Primary color for team member name */
+    font-size: 1.3rem;  /* Font size for member names */
+}
+
+/* Additional adjustments for responsiveness */
+@media (max-width: 768px) {
+    .team-member p {
+        font-size: 1.1rem;  /* Smaller font size on mobile */
+    }
+}
+
+
+@media (max-width: 768px) {
+    .count-number {
+        font-size: 2.5rem; /* Smaller font on smaller screens */
+    }
+}

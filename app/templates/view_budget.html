@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Budget</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+
+        <h3>Previous Trips</h3>
+        <form method="GET" action="{{ url_for('auth.view_budget', budget_id=budget.id) }}">
+            <div class="form-group">
+                <label for="previous_budget">Select Previous Trip:</label>
+                <select id="previous_budget" name="previous_budget" class="form-control" onchange="this.form.submit()">
+                    <option value="">-- Select a Trip --</option>
+                    {% for prev_budget in previous_budgets %}
+                        <option value="{{ prev_budget.id }}" {% if prev_budget.id == budget.id %}selected{% endif %}>
+                            {{ prev_budget.trip_name }} (Budget: {{ prev_budget.total_budget }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+
+        <h1 class="mt-4">View Budget: {{ budget.trip_name }}</h1>
+
+        <div class="summary mb-4">
+            <p><strong>Total Budget:</strong> {{ budget.total_budget }}</p>
+            <p><strong>Remaining Budget:</strong> {{ budget.remaining_budget }}</p>
+        </div>
+
+        <h2>Add Expense</h2>
+        <form method="POST" action="{{ url_for('auth.add_expense', budget_id=budget.id) }}">
+            <div class="form-group">
+                <label for="expense_name">Expense Name:</label>
+                <input type="text" id="expense_name" name="expense_name" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="expense_amount">Expense Amount:</label>
+                <input type="number" id="expense_amount" name="expense_amount" class="form-control" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Expense</button>
+        </form>
+
+        <h3 class="mt-4">List of Expenses</h3>
+        <ul class="list-group">
+            {% for expense in expenses %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ expense.name }}: {{ expense.amount }} 
+                    <a href="{{ url_for('auth.edit_expense', expense_id=expense.id) }}" class="btn btn-warning btn-sm">Edit</a>
+                </li>
+            {% else %}
+                <li class="list-group-item">No expenses added yet.</li>
+            {% endfor %}
+        </ul>
+
+        <div class="mt-4">
+            <a href="{{ url_for('auth.create_budget') }}" class="btn btn-success">Create New Budget</a>
+            <a href="{{ url_for('views.home') }}" class="btn btn-secondary">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

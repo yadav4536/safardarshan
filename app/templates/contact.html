@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="SafarDarshan Contact Page">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+       <!-- Title -->
+       <title>SafarDarshan | Home</title>
+       <!-- google font -->
+           <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800" rel="stylesheet">
+       
+       
+           <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap/bootstrap.min.css') }}">
+           <link rel="stylesheet" href="{{ url_for('static', filename='css/others/animate.css') }}">
+           <link rel="stylesheet" href="{{ url_for('static', filename='css/others/magnific-popup.css') }}">
+           <link rel="stylesheet" href="{{ url_for('static', filename='css/others/owl.carousel.min.css') }}">
+           <link rel="stylesheet" href="{{ url_for('static', filename='css/others/font-awesome.min.css') }}">
+           <link rel="stylesheet" href="{{ url_for('static', filename='css/others/pe-icon-7-stroke.css') }}">
+           
+       
+           <!-- Core Stylesheet -->
+           <link href="{{ url_for('static', filename='css/responsive/style.css') }}" rel="stylesheet">
+           <link href="{{ url_for('static', filename='css/responsive/contact.css') }}" rel="stylesheet">
+       
+           <!-- Responsive CSS -->
+           <link href="{{ url_for('static', filename='css/responsive/responsive.css') }}" rel="stylesheet">
+           <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+       
+       
+       </head>
+       
+       <body>
+       
+        <!-- Flash Message -->
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-success alert-dismissible fade show flash-message" role="alert">
+            <strong>{{ message }}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %} 
+       
+         <!-- Preloader -->
+         <div id="preloader">
+           <div class="dorne-load"></div>
+       </div>
+         
+       
+           <!-- ***** Search Form Area ***** -->
+       <div class="dorne-search-form d-flex align-items-center">
+           <div class="container">
+               <div class="row">
+                   <div class="col-12">
+                       <div class="search-close-btn" id="closeBtn">
+                           <i class="pe-7s-close-circle" aria-hidden="true"></i>
+                       </div>
+                       <form action="{{ url_for('views.search') }}" method="get"> 
+                           <input type="search" name="query" id="search" placeholder="Search Your Desired Destinations or Events" required> <!-- Updated name -->
+                           <input type="submit" class="d-none" value="submit">
+                       </form>
+                   </div>
+               </div>
+           </div>
+       </div>
+       
+       
+         
+       <!-- ***** Header Area Start ***** -->
+       <header class="header_area" id="header">
+           <div class="container-fluid h-100">
+               <div class="row h-100">
+                   <div class="col-12 h-100">
+                       <nav class="h-100 navbar navbar-expand-lg">
+                           <a class="navbar-brand" href="{{ url_for('views.home') }}">
+                               <img src="{{ url_for('static', filename='img/core-img/logo1.png') }}" alt="Website Logo">
+                           </a>
+                           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#dorneNav" aria-controls="dorneNav" aria-expanded="false" aria-label="Toggle navigation">
+                               <span class="fa fa-bars"></span>
+                           </button>
+                           <!-- Nav -->
+                           <div class="collapse navbar-collapse" id="dorneNav">
+                               <ul class="navbar-nav mr-auto" id="dorneMenu">
+                                   <li class="nav-item active">
+                                       <a class="nav-link" href="{{ url_for('views.home') }}">Home <span class="sr-only">(current)</span></a>
+                                   </li>
+                                   <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Explore <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="/explore/destinations">Destinations</a>
+                                        <a class="dropdown-item" href="/explore/hotels">Hotels</a>
+                                        <a class="dropdown-item" href="/explore/restaurants">Restaurants</a>
+                                    </div>
+                                </li>
+                                   <li class="nav-item">
+                                       <a class="nav-link" href="{{ url_for('views.contact') }}">Contact</a>
+                                   </li>
+                                   <li class="nav-item">
+                                       <a class="nav-link" href="{{ url_for('views.about') }}">About Us</a>
+                                   </li>
+                               </ul>
+       
+                               <!-- Search button (Visible to everyone) -->
+                               <div class="dorne-search-btn">
+                                   <a id="search-btn" href="#" aria-label="Search">
+                                       <i class="fa fa-search" aria-hidden="true"></i> Search
+                                   </a>
+                               </div>
+       
+                               <!-- If the user is not logged in -->
+                               {% if not current_user.is_authenticated %}
+                               <div class="dorne-signin-btn">
+                                   <a href="/signin">Sign in or Sign up</a>
+                               </div>
+                               <!-- If the user is logged in -->
+                               {% else %}
+                               <!-- Profile Button (Visible only after login) -->
+                               <div class="dorne-profile-btn">
+                                   <a href="/profile" class="btn dorne-btn">Profile</a>
+                               </div>
+       
+                               <!-- Add Listings Button (Visible if user ID is 1, 2, 3, or 4) -->
+                               {% if current_user.id in [1, 2, 3, 4] %}
+                               <div class="dorne-add-listings-btn">
+                                   <a href="/add_place" class="btn dorne-btn">+ Add</a>
+                               </div>
+                               <!-- Favorites Button (Visible for other users) -->
+                               {% else %}
+                               <div class="dorne-favorites-btn">
+                                   <a href="#" class="btn dorne-btn">
+                                       <i class="fa fa-heart"></i> Favorites
+                                   </a>
+                               </div>
+                               {% endif %}
+                               {% endif %}
+                           </div>
+                       </nav>
+                   </div>
+               </div>
+           </div>
+       </header>
+       <!-- ***** Header Area End ***** -->
+
+      <!-- ***** Breadcumb Area Start ***** -->
+      <div class="breadcumb-area bg-img bg-overlay" style="background-image: url(static/img/bg-img/hero-1.jpg)">
+    </div>
+    <!-- ***** Breadcumb Area End ***** -->
+
+    <!-- Contact Area Start -->
+    <div class="dorne-contact-area d-md-flex" id="contact">
+        <!-- Contact Form Area -->
+        <div class="contact-form-area">
+            <div class="contact-text">
+                <h4>Hello, <strong>{{ current_user.name }}</strong></h4>
+                <p>At SafarDarshan, we value your feedback and inquiries. Whether you have questions about our services, need assistance planning your journey, or want to share your travel experiences, we are here to help!</p>
+                <div class="contact-info d-lg-flex justify-content-center">
+                    <div class="single-contact-info">
+                        <h6><i class="fa fa-map-signs" aria-hidden="true"></i> BBD Green City , Chinhat, Lucknow India</h6>
+                    </div>
+                    <div class="single-contact-info">
+                        <h6><i class="fa fa-envelope-o" aria-hidden="true"></i> info@safardarshan.com</h6>
+                        <h6><i class="fa fa-phone" aria-hidden="true"></i> +91 8887969381 <br> +91 6388192132</h6>
+                    </div>
+                </div>
+            </div>
+            <div class="contact-form">
+                <div class="contact-form-title">
+                    <h6>Contact</h6>
+                </div>
+                <form method="POST" action="{{ url_for('views.send_message') }}">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <input type="text" name="name" class="form-control" placeholder="Your Name" required>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <input type="email" name="email" class="form-control" placeholder="Email Address" required>
+                        </div>
+                        <div class="col-12">
+                            <input type="text" name="subject" class="form-control" placeholder="Subject" required>
+                        </div>
+                        <div class="col-12">
+                            <textarea name="message" class="form-control" cols="30" rows="10" placeholder="Your Message" required></textarea>
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn dorne-btn">Send</button>
+                        </div>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+    <!-- Contact Area End -->
+
+    <!-- Footer Area Start -->
+    <footer class="dorne-footer-area">
+        <div class="footer-text">
+            <p>&copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | SafarDarshan</p>
+        </div>
+    </footer>
+    <!-- Footer Area End -->
+
+
+
+      <!-- jQuery-2.2.4 js -->
+    <script src="{{ url_for('static', filename='js/jquery/jquery-2.2.4.min.js') }}"></script>
+    <!-- Popper js -->
+    <script src="{{ url_for('static', filename='js/bootstrap/popper.min.js') }}"></script>
+    <!-- Bootstrap-4 js -->
+    <script src="{{ url_for('static', filename='js/bootstrap/bootstrap.min.js') }}"></script>
+    <!-- All Plugins js -->
+    <script src="{{ url_for('static', filename='js/others/plugins.js') }}"></script>
+    <!-- Active JS -->
+    <script src="{{ url_for('static',filename='js/active.js') }}"></script>
+
+
+    <script src="{{ url_for('static', filename='js/others/index.js') }}"></script>
+   
+
+</body>
+
+</html>
